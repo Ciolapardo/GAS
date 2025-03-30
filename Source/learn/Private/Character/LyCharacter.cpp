@@ -2,4 +2,44 @@
 
 
 #include "Character/LyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
+#include "Player/LyPlayerState.h"
 
+ALyCharacter::ALyCharacter()
+{
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+
+}
+
+void ALyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	//服务器端初始化player
+	InitAbilityActorInfo();
+}
+
+void ALyCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	//客户端初始化player
+	InitAbilityActorInfo();
+}
+
+void ALyCharacter::InitAbilityActorInfo()
+{
+	ALyPlayerState* LyPlayerState = GetPlayerState<ALyPlayerState>();
+	check(LyPlayerState);
+	LyPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(LyPlayerState, this);
+	AbilitySystemComponent = LyPlayerState->GetAbilitySystemComponent();
+	AttributeSet = LyPlayerState->GetAttributeSet();
+}

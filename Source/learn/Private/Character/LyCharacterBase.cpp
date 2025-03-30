@@ -12,6 +12,11 @@ ALyCharacterBase::ALyCharacterBase()
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+UAbilitySystemComponent* ALyCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void ALyCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

@@ -4,14 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Character/LyCharacterBase.h"
+#include "Interaction/EnemyInterface.h"
 #include "LyEnemy.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LEARN_API ALyEnemy : public ALyCharacterBase
+class LEARN_API ALyEnemy : public ALyCharacterBase , public IEnemyInterface
 {
 	GENERATED_BODY()
 	
+public:
+	ALyEnemy();
+	/*选中提示接口*/
+	virtual void HighlightActor() override;
+	virtual void UnHighlightActor() override;
+
+protected:
+	virtual void BeginPlay() override;
+
+
 };

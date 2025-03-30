@@ -13,5 +13,13 @@ UCLASS()
 class LEARN_API ALyCharacter : public ALyCharacterBase
 {
 	GENERATED_BODY()
-	
+public:
+	ALyCharacter();
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
+private:
+	void InitAbilityActorInfo();
+
 };
