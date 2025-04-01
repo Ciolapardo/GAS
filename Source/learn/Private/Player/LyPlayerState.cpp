@@ -2,19 +2,19 @@
 
 
 #include "Player/LyPlayerState.h"
-#include "AbilitySystemComponent.h"
-#include "AttributeSet.h"
+#include "AbilitySystem/LyAbilitySystemComponent.h"
+#include "AbilitySystem/LyAttributeSet.h"
 
 ALyPlayerState::ALyPlayerState()
 {
 	//服务器每秒向客户端发送100次更新	
 	SetNetUpdateFrequency(100.f);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<ULyAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	AttributeSet = CreateDefaultSubobject<UAttributeSet>(TEXT("AttributeSet"));
+	AttributeSet = CreateDefaultSubobject<ULyAttributeSet>(TEXT("AttributeSet"));
 
 
 }
