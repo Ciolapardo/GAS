@@ -8,6 +8,29 @@
 
 class UAbilitySystemComponent;
 class UAttributeSet;
+USTRUCT(BlueprintType)
+struct FwidgetControllerParams
+{
+	GENERATED_BODY()
+
+	FwidgetControllerParams() {}
+
+	FwidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ABS, UAttributeSet* AS)
+		: PlayerController(PC), PlayerState(PS), AbilitySystemComponent(ABS), AttributeSet(AS) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<APlayerController> PlayerController = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<APlayerState> PlayerState = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAttributeSet> AttributeSet = nullptr;
+	
+};
 /**
  * 
  */
@@ -16,7 +39,11 @@ class LEARN_API ULyWidgetController : public UObject
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetWidgetControllerParams(const FwidgetControllerParams& WCParams);
 
+	virtual void BroadcastInitialValues();
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;

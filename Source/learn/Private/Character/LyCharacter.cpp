@@ -5,7 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Player/LyPlayerState.h"
-
+#include "Player/LyPlayerController.h"
+#include "UI/HUD/LyHUD.h"
 ALyCharacter::ALyCharacter()
 {
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -42,4 +43,12 @@ void ALyCharacter::InitAbilityActorInfo()
 	LyPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(LyPlayerState, this);
 	AbilitySystemComponent = LyPlayerState->GetAbilitySystemComponent();
 	AttributeSet = LyPlayerState->GetAttributeSet();
+
+	if (ALyPlayerController* LyPlayerController = Cast<ALyPlayerController>(GetController()))
+	{
+		if (ALyHUD* LyHUD = Cast<ALyHUD>(LyPlayerController->GetHUD()))
+		{
+			LyHUD->InitOverlay(LyPlayerController, LyPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
 }
