@@ -11,6 +11,7 @@ UOverlayWidgetController* ALyHUD::GetOverlayWidgetController(const FwidgetContro
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this,OverlayWidgetControllerClass); 
 		OverlayWidgetController->SetWidgetControllerParams(WCParmas);
+		OverlayWidgetController->BindCallBacksToDependencies();
 	}
 	return OverlayWidgetController;
 }
@@ -27,7 +28,7 @@ void ALyHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystem
 
 	OverlayWidget->SetWidgetController(WidgetController);
 	WidgetController->BroadcastInitialValues();
-	OverlayWidget->AddToViewport();
+	Widget->AddToViewport();
 
 }
 

@@ -42,8 +42,8 @@ class LEARN_API ULyWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FwidgetControllerParams& WCParams);
-
 	virtual void BroadcastInitialValues();
+	virtual void BindCallBacksToDependencies();
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;

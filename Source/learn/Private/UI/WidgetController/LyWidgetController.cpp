@@ -15,3 +15,8 @@ void ULyWidgetController::BroadcastInitialValues()
 {
 
 }
+
+void ULyWidgetController::BindCallBacksToDependencies()
+{
+
+}

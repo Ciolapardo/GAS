@@ -6,10 +6,10 @@
 
 ULyAttributeSet::ULyAttributeSet()
 {
-	InitHealth(100.f);
+	InitHealth(25.f);
 	InitMaxHealth(100.f);
 	InitMana(50.f);
-	InitMaxMana(50.f);
+	InitMaxMana(75.f);
 }
 
 void ULyAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
