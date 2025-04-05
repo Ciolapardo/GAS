@@ -3,3 +3,18 @@
 
 #include "AbilitySystem/LyAbilitySystemComponent.h"
 
+void ULyAbilitySystemComponent::AbilityActorInfoSet()
+{
+
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &ULyAbilitySystemComponent::EffectApplied);
+
+}
+
+void ULyAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+{
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+
+	EffectAssetTags.Broadcast(TagContainer);
+
+}

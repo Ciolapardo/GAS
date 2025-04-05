@@ -2,6 +2,7 @@
 
 
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AbilitySystem/LyAttributeSet.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
@@ -34,6 +35,17 @@ void UOverlayWidgetController::BindCallBacksToDependencies()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		LyAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+
+	Cast<ULyAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[](const FGameplayTagContainer& AssetTags)
+		{
+			for (const FGameplayTag& Tag : AssetTags)
+			{
+				FString Msg = FString::Printf(TEXT("GameplayTags :%s"), *Tag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Green, Msg);
+			}
+		}
+	);
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

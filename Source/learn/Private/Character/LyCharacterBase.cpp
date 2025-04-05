@@ -23,3 +23,8 @@ void ALyCharacterBase::BeginPlay()
 	
 }
 
+void ALyCharacterBase::InitAbilityActorInfo()
+{
+
+}
+

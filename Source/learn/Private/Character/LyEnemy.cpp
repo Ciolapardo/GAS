@@ -4,6 +4,7 @@
 #include "Character/LyEnemy.h"
 #include "learn/learn.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AttributeSet.h"
 
 
@@ -11,7 +12,7 @@ ALyEnemy::ALyEnemy()
 {
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<ULyAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
@@ -40,6 +41,13 @@ void ALyEnemy::UnHighlightActor()
 void ALyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	
+	InitAbilityActorInfo();
+}
+
+void ALyEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	Cast<ULyAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

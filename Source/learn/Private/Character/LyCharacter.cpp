@@ -3,6 +3,7 @@
 
 #include "Character/LyCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Player/LyPlayerState.h"
 #include "Player/LyPlayerController.h"
@@ -41,6 +42,9 @@ void ALyCharacter::InitAbilityActorInfo()
 	ALyPlayerState* LyPlayerState = GetPlayerState<ALyPlayerState>();
 	check(LyPlayerState);
 	LyPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(LyPlayerState, this);
+
+	Cast<ULyAbilitySystemComponent>(LyPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+
 	AbilitySystemComponent = LyPlayerState->GetAbilitySystemComponent();
 	AttributeSet = LyPlayerState->GetAttributeSet();
 
