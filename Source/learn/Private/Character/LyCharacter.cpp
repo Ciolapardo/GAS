@@ -55,4 +55,5 @@ void ALyCharacter::InitAbilityActorInfo()
 			LyHUD->InitOverlay(LyPlayerController, LyPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
+	InitializeDefaultAttributes();
 }

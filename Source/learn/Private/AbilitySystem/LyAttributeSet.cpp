@@ -11,19 +11,35 @@
 ULyAttributeSet::ULyAttributeSet()
 {
 	InitHealth(25.f);
-	InitMaxHealth(100.f);
 	InitMana(50.f);
-	InitMaxMana(75.f);
 }
 
 void ULyAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	// Primary Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Resilience, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
+	
+	// Secondary Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Armor, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, ArmorPenetration, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, BlockChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, CriticalHitDamage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, CriticalHitResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, HealthRegeneration, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, ManaRegeneration, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+	
+	// Vital Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULyAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	
 }
 
 void ULyAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -31,11 +47,11 @@ void ULyAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 	Super::PreAttributeBaseChange(Attribute, NewValue);
 	if (Attribute == GetHealthAttribute())
 	{
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
 	}
 	if (Attribute == GetManaAttribute())
 	{
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
 	}
 	
 }
@@ -78,7 +94,75 @@ void ULyAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
 
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
 
+}
+
+void ULyAttributeSet::OnRep_Strength(FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, Strength, OldStrength);
+}
+
+void ULyAttributeSet::OnRep_Intelligence(FGameplayAttributeData& OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, Intelligence, OldIntelligence);
+}
+
+void ULyAttributeSet::OnRep_Resilience(FGameplayAttributeData& OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, Resilience, OldResilience);
+}
+
+void ULyAttributeSet::OnRep_Vigor(FGameplayAttributeData& OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, Vigor, OldVigor);
+}
+
+void ULyAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, Armor, OldArmor);
+}
+
+void ULyAttributeSet::OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, ArmorPenetration, OldArmorPenetration);
+}
+
+void ULyAttributeSet::OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, BlockChance, OldBlockChance);
+}
+
+void ULyAttributeSet::OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, CriticalHitChance, OldCriticalHitChance);
+}
+
+void ULyAttributeSet::OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, CriticalHitDamage, OldCriticalHitDamage);
+}
+
+void ULyAttributeSet::OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, CriticalHitResistance, OldCriticalHitResistance);
+}
+
+void ULyAttributeSet::OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, HealthRegeneration, OldHealthRegeneration);
+}
+
+void ULyAttributeSet::OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULyAttributeSet, ManaRegeneration, OldManaRegeneration);
 }
 
 void ULyAttributeSet::OnRep_Health(FGameplayAttributeData& OldHealth) const

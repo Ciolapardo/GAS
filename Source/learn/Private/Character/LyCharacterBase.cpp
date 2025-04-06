@@ -2,6 +2,9 @@
 
 
 #include "Character/LyCharacterBase.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayEffectTypes.h"
 
 ALyCharacterBase::ALyCharacterBase()
 {
@@ -26,5 +29,21 @@ void ALyCharacterBase::BeginPlay()
 void ALyCharacterBase::InitAbilityActorInfo()
 {
 
+}
+
+void ALyCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(IsValid(GameplayEffectClass));
+
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, level, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+}
+
+void ALyCharacterBase::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributeEffect,1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributeEffect,1.f);
 }
 
