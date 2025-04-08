@@ -37,6 +37,13 @@ void ALyCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 ALyCharacter::GetPlayerLevel_Implementation()
+{
+	const ALyPlayerState* LyPlayerState = GetPlayerState<ALyPlayerState>();
+	check(LyPlayerState);
+	return LyPlayerState->GetPlayerLevel();
+}
+
 void ALyCharacter::InitAbilityActorInfo()
 {
 	ALyPlayerState* LyPlayerState = GetPlayerState<ALyPlayerState>();

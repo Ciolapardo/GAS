@@ -38,6 +38,11 @@ void ALyEnemy::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
+int32 ALyEnemy::GetPlayerLevel_Implementation()
+{
+	return Level;
+}
+
 void ALyEnemy::BeginPlay()
 {
 	Super::BeginPlay();

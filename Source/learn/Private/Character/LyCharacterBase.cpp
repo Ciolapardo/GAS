@@ -35,8 +35,8 @@ void ALyCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEf
 {
 	check(IsValid(GetAbilitySystemComponent()));
 	check(IsValid(GameplayEffectClass));
-
-	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	ContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, level, ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
 }
@@ -45,5 +45,6 @@ void ALyCharacterBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributeEffect,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributeEffect,1.f);
+	ApplyEffectToSelf(DefaultVitalAttributeEffect, 1.f);
 }
 

@@ -4,6 +4,7 @@
 #include "Player/LyPlayerState.h"
 #include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AbilitySystem/LyAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 ALyPlayerState::ALyPlayerState()
 {
@@ -19,7 +20,24 @@ ALyPlayerState::ALyPlayerState()
 
 }
 
+void ALyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ALyPlayerState, Level);
+	DOREPLIFETIME(ALyPlayerState, XP);
+}
+
 UAbilitySystemComponent* ALyPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ALyPlayerState::OnRep_Level(int32 OldLevel)
+{
+	OnLevelChangedDelegate.Broadcast(Level, Level > OldLevel);
+}
+
+void ALyPlayerState::OnRep_XP(int32 OldXP)
+{
+	OnXPChangedDelegate.Broadcast(XP);
 }
