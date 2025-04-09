@@ -2,6 +2,7 @@
 
 
 #include "AbilitySystem/LyAbilitySystemComponent.h"
+#include "LyGameplayTags.h"
 
 void ULyAbilitySystemComponent::AbilityActorInfoSet()
 {
