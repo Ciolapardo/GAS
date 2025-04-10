@@ -4,6 +4,7 @@
 #include "UI/HUD/LyHUD.h"
 #include "UI/Widget/LyUserWidget.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "UI/WidgetController/AttributeMenuWidgetController.h"
 
 UOverlayWidgetController* ALyHUD::GetOverlayWidgetController(const FwidgetControllerParams& WCParmas)
 {
@@ -14,6 +15,17 @@ UOverlayWidgetController* ALyHUD::GetOverlayWidgetController(const FwidgetContro
 		OverlayWidgetController->BindCallBacksToDependencies();
 	}
 	return OverlayWidgetController;
+}
+
+UAttributeMenuWidgetController* ALyHUD::GetAttributeMenuWidgetController(const FwidgetControllerParams& WCParmas)
+{
+	if (AttributeMenuWidgetController == nullptr)
+	{
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController->SetWidgetControllerParams(WCParmas);
+		AttributeMenuWidgetController->BindCallBacksToDependencies();
+	}
+	return AttributeMenuWidgetController;
 }
 
 void ALyHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ABS, UAttributeSet* AS)
