@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Character/LyCharacterBase.h"
-#include "Interaction/CombatInterface.h"
+
 #include "LyCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LEARN_API ALyCharacter : public ALyCharacterBase, public ICombatInterface
+class LEARN_API ALyCharacter : public ALyCharacterBase
 {
 	GENERATED_BODY()
 public:
@@ -20,7 +20,6 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 	virtual int32 GetPlayerLevel_Implementation() override;
-
 private:
 	virtual void InitAbilityActorInfo() override;
 

@@ -4,6 +4,7 @@
 #include "Character/LyCharacterBase.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "GameplayEffectTypes.h"
 
 ALyCharacterBase::ALyCharacterBase()
@@ -31,6 +32,12 @@ void ALyCharacterBase::InitAbilityActorInfo()
 
 }
 
+FVector ALyCharacterBase::GetCombatSocketLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void ALyCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
@@ -46,5 +53,14 @@ void ALyCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributeEffect,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributeEffect,1.f);
 	ApplyEffectToSelf(DefaultVitalAttributeEffect, 1.f);
+}
+
+void ALyCharacterBase::AddCharacterAbilities()
+{
+	
+	if (!HasAuthority()) return;
+
+	ULyAbilitySystemComponent* LyAbilitySystemComponent = CastChecked<ULyAbilitySystemComponent>(AbilitySystemComponent);
+	LyAbilitySystemComponent->AddCharacterAbilities(StartupAbilities);
 }
 

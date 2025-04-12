@@ -27,6 +27,7 @@ void ALyCharacter::PossessedBy(AController* NewController)
 	
 	//服务器端初始化player
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void ALyCharacter::OnRep_PlayerState()

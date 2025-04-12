@@ -28,6 +28,18 @@ public:
 	FGameplayTag Attributes_Secondary_ManaRegeneration;
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
+
+	FGameplayTag InputTag_LMB;
+	FGameplayTag InputTag_LL;
+	FGameplayTag InputTag_LLL;
+	FGameplayTag InputTag_RMB;
+	FGameplayTag InputTag_RR;
+	FGameplayTag InputTag_RRR;
+	FGameplayTag InputTag_RRRR;
+	FGameplayTag InputTag_1;
+	FGameplayTag InputTag_2;
+	FGameplayTag InputTag_3;
+	FGameplayTag InputTag_4;
 protected:
 
 

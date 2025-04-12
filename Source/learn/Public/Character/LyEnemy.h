@@ -5,14 +5,13 @@
 #include "CoreMinimal.h"
 #include "Character/LyCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
-#include "Interaction/CombatInterface.h"
 #include "LyEnemy.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LEARN_API ALyEnemy : public ALyCharacterBase, public IEnemyInterface, public ICombatInterface
+class LEARN_API ALyEnemy : public ALyCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 	

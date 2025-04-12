@@ -23,4 +23,5 @@ class LEARN_API ICombatInterface
 	
 public:
 	virtual int32 GetPlayerLevel_Implementation();
+	virtual FVector GetCombatSocketLocation();
 };
