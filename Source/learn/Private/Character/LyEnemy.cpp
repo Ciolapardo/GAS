@@ -6,7 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AttributeSet.h"
-
+#include "AbilitySystem/LyAttributeSet.h"
+#include "Components/WidgetComponent.h"
 
 ALyEnemy::ALyEnemy()
 {
@@ -16,9 +17,10 @@ ALyEnemy::ALyEnemy()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
-	AttributeSet = CreateDefaultSubobject<UAttributeSet>(TEXT("AttributeSet"));
+	AttributeSet = CreateDefaultSubobject<ULyAttributeSet>(TEXT("AttributeSet"));
 
-	
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+	HealthBar->SetupAttachment(GetRootComponent());
 	
 }
 
@@ -55,4 +57,6 @@ void ALyEnemy::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
 	Cast<ULyAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	InitializeDefaultAttributes();
 }

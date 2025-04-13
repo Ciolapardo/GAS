@@ -104,6 +104,8 @@ void ALyPlayerController::SetupInputComponent()
 
 	ULyInputComponent* LyInputComponent = CastChecked<ULyInputComponent>(InputComponent);
 	LyInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALyPlayerController::Move);
+	LyInputComponent->BindAction(SAction, ETriggerEvent::Started, this, &ALyPlayerController::SPress);
+	LyInputComponent->BindAction(SAction, ETriggerEvent::Completed, this, &ALyPlayerController::SReleased);
 	LyInputComponent->BindAction(ToggleMouseAction, ETriggerEvent::Triggered, this, &ALyPlayerController::ToggleMouseControl);
 	LyInputComponent->BindAbilityActions(InputConfig, this, &ALyPlayerController::AbilityInputTagPressed, &ALyPlayerController::AbilityInputTagReleased, &ALyPlayerController::AbilityInputTagHeld);
 }
@@ -122,6 +124,16 @@ void ALyPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControllPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControllPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
+}
+
+void ALyPlayerController::SPress()
+{
+	bIsSKeyDown = true;
+}
+
+void ALyPlayerController::SReleased()
+{
+	bIsSKeyDown = false;
 }
 
 void ALyPlayerController::CursorTrace()
@@ -147,7 +159,7 @@ void ALyPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 	if (bMouseVisible&&InputTag.MatchesTagExact(FLyGameplayTags::Get().InputTag_LMB))
 	{
 		bTargeting = ThisActor ? true : false;
-		FollowTime = 0.f;
+		bAutoRuning = false;
 	}
 	
 }
@@ -162,14 +174,12 @@ void ALyPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 	if (bMouseVisible)
 	{
-		if (bTargeting)
+		if (GetASC())
 		{
-			if (GetASC())
-			{
-				GetASC()->AbilityInputTagReleased(InputTag);
-			}
+			GetASC()->AbilityInputTagReleased(InputTag);
 		}
-		else
+
+		if (!bTargeting&&!bIsSKeyDown)
 		{
 			APawn* ControlledPawn = GetPawn();
 			if (FollowTime <= ShortPressThreshold)
@@ -188,9 +198,9 @@ void ALyPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					}
 					bAutoRuning = true;
 				}
-				FollowTime = 0.f;
-				bTargeting = false;
 			}
+			FollowTime = 0.f;
+			bTargeting = false;
 		}
 	} 
 }
@@ -206,7 +216,7 @@ void ALyPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 
 	if(bMouseVisible)
 	{
-		if (bTargeting)
+		if (bTargeting || bIsSKeyDown)
 		{
 			if (GetASC()) 	GetASC()->AbilityInputTagHeld(InputTag);
 		}

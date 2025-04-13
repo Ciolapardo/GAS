@@ -10,7 +10,7 @@ public class learn : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayAbilities", "AIModule" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput", "GameplayAbilities", "GameplayTags" , "GameplayTasks","NavigationSystem" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput", "GameplayAbilities", "GameplayTags" , "GameplayTasks","NavigationSystem","Niagara" });
 
         PublicIncludePaths.Add("EnhancedInput/Public");
         // Uncomment if you are using Slate UI

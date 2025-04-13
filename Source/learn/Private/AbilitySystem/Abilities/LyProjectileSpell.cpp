@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/LyProjectileSpell.h"
 #include "Actor/LyProjectile.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Interaction/CombatInterface.h"
 
 void ULyProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -11,16 +13,25 @@ void ULyProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+	
+
+	
+}
+
+void ULyProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
+{
+
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		const FRotator Rotator = (ProjectileTargetLocation - SocketLocation).Rotation();
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-		//设计旋转角度
+		SpawnTransform.SetRotation(Rotator.Quaternion());
 
 		ALyProjectile* Projectile = GetWorld()->SpawnActorDeferred<ALyProjectile>(
 			ProjectileClass,
@@ -29,9 +40,12 @@ void ULyProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 			Cast<APawn>(GetAvatarActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		//设置GE效果来造成伤害
+		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle = SpecHandle;
+
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 
-	
 }

@@ -10,6 +10,7 @@
 class ALyProjectile;
 class UGameplayEffect;
 struct FGameplayTag;
+class UGameplayEffcet;
 /**
  * 
  */
@@ -24,4 +25,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<ALyProjectile> ProjectileClass;
+
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };

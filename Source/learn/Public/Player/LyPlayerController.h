@@ -43,11 +43,17 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SAction;
+
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
 	FHitResult CursorHit;
 
 	void Move(const FInputActionValue& InputActionValue);
+	void SPress();
+	void SReleased();
+	bool bIsSKeyDown = false;
 
 	void CursorTrace();
 

@@ -6,10 +6,18 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "GameplayEffectTypes.h"
+#include "Components/CapsuleComponent.h"
+#include "learn/learn.h"
 
 ALyCharacterBase::ALyCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(), TEXT("WeaponHandSocket")); 
@@ -44,8 +52,16 @@ void ALyCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEf
 	check(IsValid(GameplayEffectClass));
 	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
 	ContextHandle.AddSourceObject(this);
+	UE_LOG(LogTemp, Log, TEXT("EffectContext created for %s"), *GetName());
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, level, ContextHandle);
+	if (!SpecHandle.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to create GameplayEffectSpec"));
+		return;
+	}
+	UE_LOG(LogTemp, Log, TEXT("GameplayEffectSpec created with level %f"), level);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+	UE_LOG(LogTemp, Log, TEXT("GameplayEffect successfully applied to target %s"), *GetName());
 }
 
 void ALyCharacterBase::InitializeDefaultAttributes() const
