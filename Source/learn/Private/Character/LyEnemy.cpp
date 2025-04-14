@@ -7,6 +7,7 @@
 #include "AbilitySystem/LyAbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "AbilitySystem/LyAttributeSet.h"
+#include "UI/Widget/LyUserWidget.h"
 #include "Components/WidgetComponent.h"
 
 ALyEnemy::ALyEnemy()
@@ -49,6 +50,29 @@ void ALyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (ULyUserWidget* LyUserWidget = Cast<ULyUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		LyUserWidget->SetWidgetController(this);
+	}
+
+	if (const ULyAttributeSet* LyAS = Cast<ULyAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(LyAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(LyAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		OnHealthChanged.Broadcast(LyAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(LyAS->GetMaxHealth());
+	}
+
 	InitAbilityActorInfo();
 }
 

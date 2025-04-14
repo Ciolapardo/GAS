@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/LyCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "LyEnemy.generated.h"
 
 
@@ -24,7 +25,12 @@ public:
 	virtual void UnHighlightActor() override;
 
 	virtual int32 GetPlayerLevel_Implementation() override;
+				
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
